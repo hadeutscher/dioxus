@@ -2664,8 +2664,12 @@ impl BuildRequest {
     }
 
     pub(crate) fn bundled_app_name(&self) -> String {
-        use convert_case::{Case, Casing};
-        self.executable_name().to_case(Case::Pascal)
+        if let Ok(name) = std::env::var("XXX_APP_NAME") {
+            name
+        } else {
+            use convert_case::{Case, Casing};
+            self.executable_name().to_case(Case::Pascal)
+        }
     }
 
     /// Get the crate version from Cargo.toml (e.g., "0.1.0")
