@@ -59,6 +59,7 @@
 //! Notice that we *could* feasibly build this ourselves :)
 
 use crate::BuildRequest;
+use crate::bundler::copy_dir_recursive;
 use crate::{BuildContext, Result};
 use anyhow::{bail, Context};
 use itertools::Itertools;
@@ -320,62 +321,66 @@ impl BuildRequest {
             ),
         )?;
 
-        create_dir_all(res.join("drawable"))?;
-        write(
-            res.join("drawable").join("ic_launcher_background.xml"),
-            include_bytes!(
-                "../../assets/android/gen/app/src/main/res/drawable/ic_launcher_background.xml"
-            ),
-        )?;
-        create_dir_all(res.join("drawable-v24"))?;
-        write(
-            res.join("drawable-v24").join("ic_launcher_foreground.xml"),
-            include_bytes!(
-                "../../assets/android/gen/app/src/main/res/drawable-v24/ic_launcher_foreground.xml"
-            ),
-        )?;
-        create_dir_all(res.join("mipmap-anydpi-v26"))?;
-        write(
-            res.join("mipmap-anydpi-v26").join("ic_launcher.xml"),
-            include_bytes!(
-                "../../assets/android/gen/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml"
-            ),
-        )?;
-        create_dir_all(res.join("mipmap-hdpi"))?;
-        write(
-            res.join("mipmap-hdpi").join("ic_launcher.webp"),
-            include_bytes!(
-                "../../assets/android/gen/app/src/main/res/mipmap-hdpi/ic_launcher.webp"
-            ),
-        )?;
-        create_dir_all(res.join("mipmap-mdpi"))?;
-        write(
-            res.join("mipmap-mdpi").join("ic_launcher.webp"),
-            include_bytes!(
-                "../../assets/android/gen/app/src/main/res/mipmap-mdpi/ic_launcher.webp"
-            ),
-        )?;
-        create_dir_all(res.join("mipmap-xhdpi"))?;
-        write(
-            res.join("mipmap-xhdpi").join("ic_launcher.webp"),
-            include_bytes!(
-                "../../assets/android/gen/app/src/main/res/mipmap-xhdpi/ic_launcher.webp"
-            ),
-        )?;
-        create_dir_all(res.join("mipmap-xxhdpi"))?;
-        write(
-            res.join("mipmap-xxhdpi").join("ic_launcher.webp"),
-            include_bytes!(
-                "../../assets/android/gen/app/src/main/res/mipmap-xxhdpi/ic_launcher.webp"
-            ),
-        )?;
-        create_dir_all(res.join("mipmap-xxxhdpi"))?;
-        write(
-            res.join("mipmap-xxxhdpi").join("ic_launcher.webp"),
-            include_bytes!(
-                "../../assets/android/gen/app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp"
-            ),
-        )?;
+        if let Ok(path) = std::env::var("XXX_ICON_PATH") {
+            copy_dir_recursive(&PathBuf::from(path), &res).unwrap();
+        } else {
+            create_dir_all(res.join("drawable"))?;
+            write(
+                res.join("drawable").join("ic_launcher_background.xml"),
+                include_bytes!(
+                    "../../assets/android/gen/app/src/main/res/drawable/ic_launcher_background.xml"
+                ),
+            )?;
+            create_dir_all(res.join("drawable-v24"))?;
+            write(
+                res.join("drawable-v24").join("ic_launcher_foreground.xml"),
+                include_bytes!(
+                    "../../assets/android/gen/app/src/main/res/drawable-v24/ic_launcher_foreground.xml"
+                ),
+            )?;
+            create_dir_all(res.join("mipmap-anydpi-v26"))?;
+            write(
+                res.join("mipmap-anydpi-v26").join("ic_launcher.xml"),
+                include_bytes!(
+                    "../../assets/android/gen/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml"
+                ),
+            )?;
+            create_dir_all(res.join("mipmap-hdpi"))?;
+            write(
+                res.join("mipmap-hdpi").join("ic_launcher.webp"),
+                include_bytes!(
+                    "../../assets/android/gen/app/src/main/res/mipmap-hdpi/ic_launcher.webp"
+                ),
+            )?;
+            create_dir_all(res.join("mipmap-mdpi"))?;
+            write(
+                res.join("mipmap-mdpi").join("ic_launcher.webp"),
+                include_bytes!(
+                    "../../assets/android/gen/app/src/main/res/mipmap-mdpi/ic_launcher.webp"
+                ),
+            )?;
+            create_dir_all(res.join("mipmap-xhdpi"))?;
+            write(
+                res.join("mipmap-xhdpi").join("ic_launcher.webp"),
+                include_bytes!(
+                    "../../assets/android/gen/app/src/main/res/mipmap-xhdpi/ic_launcher.webp"
+                ),
+            )?;
+            create_dir_all(res.join("mipmap-xxhdpi"))?;
+            write(
+                res.join("mipmap-xxhdpi").join("ic_launcher.webp"),
+                include_bytes!(
+                    "../../assets/android/gen/app/src/main/res/mipmap-xxhdpi/ic_launcher.webp"
+                ),
+            )?;
+            create_dir_all(res.join("mipmap-xxxhdpi"))?;
+            write(
+                res.join("mipmap-xxxhdpi").join("ic_launcher.webp"),
+                include_bytes!(
+                    "../../assets/android/gen/app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp"
+                ),
+            )?;
+        }
 
         Ok(())
     }
